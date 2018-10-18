@@ -1,0 +1,5 @@
+#!/bin/bash
+DOTFILES_BASE="$(cd "$(dirname "$0")/../" && pwd)"
+rm -f ~/.bash_profile
+ln -s "$DOTFILES_BASE"/.bash_profile ~/.bash_profile
+source ~/.bash_profile
