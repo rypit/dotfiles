@@ -1,9 +1,34 @@
 #!/bin/bash
-DOTFILES_BASE="$(cd "$(dirname "$0")/../" && pwd)"
-rm -f ~/.bash_profile
-ln -sf "$DOTFILES_BASE"/.bash_profile ~/.bash_profile
-source ~/.bash_profile
+set -e
 
-# Configure git
-ln -sf "$DOTFILES_BASE"/.gitignore_global ~/.gitignore_global
-git config --global core.excludesfile ~/.gitignore_global
+DIR="$(cd "$(dirname "$0")/../" && pwd)"
+
+# Use .bash_profile from dotfiles
+install_bash_profile() {
+  BASH_PROFILE="$HOME/.bash_profile"
+  echo "🔗 Linking up .bash_profile..."
+  ln -sf "$DIR"/.bash_profile "$BASH_PROFILE"
+}
+
+# Use .gitignore_global from dotfiles
+install_gitignore() {
+  echo "🔗 Linking up .gitignore_global..."
+  ln -sf "$DIR"/.gitignore_global ~/.gitignore_global
+  git config --global core.excludesfile ~/.gitignore_global
+}
+
+# Use .gitignore_global from dotfiles
+install_bash_it() {
+  echo "🐚 Installing bash-it"
+  BASH_IT=${BASH_IT:-"$HOME/.bash_it"}
+  if [ ! -d "$BASH_IT" ] ; then
+    git clone --quiet --depth=1 https://github.com/Bash-it/bash-it.git "$BASH_IT"
+  fi
+}
+
+# Do the things...
+install_bash_profile
+install_gitignore
+install_bash_it
+
+echo "🤙 Looks like we're good to go! Open a new shell!"
