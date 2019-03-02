@@ -10,13 +10,13 @@ DIR="$(cd "$(dirname "$0")/../" && pwd)"
 # Use .bash_profile from dotfiles
 install_bash_profile() {
   BASH_PROFILE="$HOME/.bash_profile"
-  echo "🔗 Linking up .bash_profile..."
+  echo "👨🏻‍💻 Installing .bash_profile..."
   ln -sf "$DIR"/.bash_profile "$BASH_PROFILE"
 }
 
 # Use .gitignore_global from dotfiles
 install_gitignore() {
-  echo "🔗 Linking up .gitignore_global..."
+  echo "🙈 Installing .gitignore_global..."
   ln -sf "$DIR"/.gitignore_global ~/.gitignore_global
   git config --global core.excludesfile ~/.gitignore_global
 }
