@@ -1,0 +1,10 @@
+cache:
+  bundler: true
+  directories:
+    - /var/cache/apt/archives
+if: branch = master OR type = pull_request
+sudo: required
+install:
+  - sudo apt-get install shellcheck
+script:
+  - ./script/bootstrap && ./script/test
