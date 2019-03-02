@@ -1,0 +1,12 @@
+#!/bin/bash
+
+DIR="$(cd "$(dirname "$0")/../" && pwd)"
+RESULT=$(shellcheck -e SC1090 "$DIR"/*/* .bash_profile)
+
+if [ "$RESULT" == "" ] ; then
+  echo "✅ Shellcheck passed"
+else
+  echo "❌ Shellcheck failed"
+  echo "$RESULT"
+  exit 1;
+fi
