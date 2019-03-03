@@ -39,6 +39,12 @@ install_powerline_fonts() {
   bash "$POWERLINE_FONTS/install.sh" >> /dev/null
 }
 
+configure_atom() {
+  echo "⚛️  Configuring atom..."
+  mkdir -p "$HOME/.atom"
+  ln -sf "$DIR/config/atom/config.cson" "$HOME/.atom/."
+}
+
 configure_iterm2() {
   if [ "$(uname)" == "Darwin" ] ; then
     echo "👾 Configuring iTerm2..."
@@ -55,6 +61,7 @@ install_bash_profile
 install_gitignore
 install_bash_it
 install_powerline_fonts
+configure_atom
 configure_iterm2
 
 partytime
