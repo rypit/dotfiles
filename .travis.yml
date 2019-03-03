@@ -1,10 +1,7 @@
-cache:
-  bundler: true
-  directories:
-    - /var/cache/apt/archives
+os: osx
 if: branch = master OR type = pull_request
 sudo: required
 install:
-  - sudo apt-get install shellcheck
+  - brew install shellcheck
 script:
   - ./script/bootstrap --debug && ./script/test
