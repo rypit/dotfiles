@@ -1,7 +1,7 @@
-os: osx
+language: minimal
 if: branch = master OR type = pull_request
 sudo: required
 install:
-  - brew install shellcheck
+  - sudo apt-get install shellcheck
 script:
   - ./script/bootstrap --debug && ./script/test
