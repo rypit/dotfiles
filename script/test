@@ -1,8 +1,5 @@
 #!/bin/bash
-
-DIR="$(cd "$(dirname "$0")/../" && pwd)"
-RESULT=$(shellcheck -e SC1090 "$DIR"/*/* .bash_profile)
-
+RESULT=$(shellcheck -e SC1090 script/* .bash_profile)
 if [ "$RESULT" == "" ] ; then
   echo "✅ Shellcheck passed"
 else

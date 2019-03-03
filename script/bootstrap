@@ -24,15 +24,37 @@ install_gitignore() {
 # Use .gitignore_global from dotfiles
 install_bash_it() {
   echo "🐚 Installing bash-it"
-  BASH_IT=${BASH_IT:-"$HOME/.bash_it"}
+  BASH_IT="$HOME/.bash-it"
   if [ ! -d "$BASH_IT" ] ; then
     git clone --quiet --depth=1 https://github.com/Bash-it/bash-it.git "$BASH_IT"
   fi
+}
+
+install_powerline_fonts() {
+  echo "🔠 Installing powerline-fonts..."
+  POWERLINE_FONTS="$HOME/.powerline-fonts"
+  if [ ! -d "$POWERLINE_FONTS" ] ; then
+    git clone https://github.com/powerline/fonts.git --quiet --depth=1 "$POWERLINE_FONTS"
+  fi
+  bash "$POWERLINE_FONTS/install.sh" >> /dev/null
+}
+
+configure_iterm2() {
+  if [ "$(uname)" == "Darwin" ] ; then
+    echo "👾 Configuring iTerm2..."
+    defaults import com.googlecode.iTerm2 "$DIR"/config/iterm2/com.googlecode.iterm2.plist
+  fi
+}
+
+partytime() {
+  echo -e "\n🤙 Looks like we're good to go! Open a new shell!"
 }
 
 # Do the things...
 install_bash_profile
 install_gitignore
 install_bash_it
+install_powerline_fonts
+configure_iterm2
 
-echo "🤙 Looks like we're good to go! Open a new shell!"
+partytime
