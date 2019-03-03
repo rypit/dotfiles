@@ -4,3 +4,4 @@ My personal dotfiles for [`bash`](https://www.gnu.org/software/bash/).
 * 🤼‍ Plays well with [`strap`](https://github.com/MikeMcQuaid/strap) for laptop setup.
 * 🧙‍ Leverages [`bash-it`](https://github.com/Bash-it/bash-it) for convenience.
 * 🐚 Follows [`shellcheck`](https://github.com/koalaman/shellcheck) for static analysis.
+* 🍏 Custom tailored for macOS, but should work on anything that runs bash.

@@ -40,8 +40,10 @@ install_powerline_fonts() {
 }
 
 configure_iterm2() {
-  echo "👾 Configuring iTerm2..."
-  defaults import com.googlecode.iTerm2 "$DIR"/config/iterm2/com.googlecode.iterm2.plist
+  if [ "$(uname)" == "Darwin" ] ; then
+    echo "👾 Configuring iTerm2..."
+    defaults import com.googlecode.iTerm2 "$DIR"/config/iterm2/com.googlecode.iterm2.plist
+  fi
 }
 
 partytime() {
