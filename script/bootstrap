@@ -24,7 +24,7 @@ install_gitignore() {
 # Use .gitignore_global from dotfiles
 install_bash_it() {
   echo "🐚 Installing bash-it"
-  BASH_IT=${BASH_IT:-"$HOME/.bash_it"}
+  BASH_IT="$HOME/.bash-it"
   if [ ! -d "$BASH_IT" ] ; then
     git clone --quiet --depth=1 https://github.com/Bash-it/bash-it.git "$BASH_IT"
   fi

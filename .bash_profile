@@ -16,8 +16,8 @@ esac
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
-# bash-it Cconfig.
-export BASH_IT="$HOME/.bash_it"
+# bash-it config.
+export BASH_IT="$HOME/.bash-it"
 export LC_ALL=en_US.UTF-8
 export BASH_IT_THEME='powerline-multiline'
 export SCM_GIT_SHOW_DETAILS=false
