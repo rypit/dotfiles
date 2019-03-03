@@ -64,3 +64,7 @@ function __powerline_python_prompt {
     echo "🐍 ${PYTHON_VERSION}|6"
   fi
 }
+
+# Aliases.
+alias ls="ls -G"
+alias ll="ls -l"
