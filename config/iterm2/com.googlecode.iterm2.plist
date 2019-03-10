@@ -178,17 +178,17 @@
 		<integer>1</integer>
 	</dict>
 	<key>NSWindow Frame NSColorPanel</key>
-	<string>57 243 228 332 0 0 1280 777 </string>
+	<string>583 72 228 296 0 0 1280 777 </string>
 	<key>NSWindow Frame NSFontPanel</key>
 	<string>768 33 445 77 0 0 1280 777 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>330 288 620 392 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>0 247 796 486 0 0 1280 777 </string>
+	<string>324 291 796 486 0 0 1280 777 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>664 239 650 477 0 0 1280 777 </string>
+	<string>583 117 650 477 0 0 1280 777 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>152 50 650 427 0 0 1280 777 </string>
 	<key>New Bookmarks</key>
@@ -392,14 +392,16 @@
 			</dict>
 			<key>Ansi 8 Color</key>
 			<dict>
+				<key>Alpha Component</key>
+				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.21176470588235294</real>
+				<real>0.63190597295761108</real>
 				<key>Color Space</key>
 				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.16862745098039217</real>
+				<real>0.6316215991973877</real>
 				<key>Red Component</key>
-				<real>0.0</real>
+				<real>0.57485097646713257</real>
 			</dict>
 			<key>Ansi 9 Color</key>
 			<dict>
@@ -500,13 +502,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.25882354378700256</real>
+				<real>1</real>
 				<key>Color Space</key>
 				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.21176470816135406</real>
+				<real>1</real>
 				<key>Red Component</key>
-				<real>0.027450980618596077</real>
+				<real>0.99999600649999998</real>
 			</dict>
 			<key>Cursor Type</key>
 			<integer>1</integer>
@@ -1131,7 +1133,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2019-03-03T06:47:46Z</date>
+	<date>2019-03-09T22:41:44Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>TabStyleWithAutomaticOption</key>
