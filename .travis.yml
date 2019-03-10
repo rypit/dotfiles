@@ -2,6 +2,6 @@ language: minimal
 if: branch = master OR type = pull_request
 sudo: required
 install:
-  - sudo apt-get install shellcheck
+  - ./script/travis-setup
 script:
   - ./script/bootstrap --debug && ./script/test

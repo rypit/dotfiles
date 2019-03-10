@@ -43,6 +43,7 @@ configure_atom() {
   echo "⚛️  Configuring atom..."
   mkdir -p "$HOME/.atom"
   ln -sf "$DIR/config/atom/config.cson" "$HOME/.atom/."
+  apm install --silent --packages-file "$DIR/config/atom/packages" >> /dev/null
 }
 
 configure_iterm2() {
