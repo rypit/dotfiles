@@ -16,9 +16,10 @@ install_bash_profile() {
 
 # Use .gitignore_global from dotfiles
 install_gitignore() {
-  echo "🙈 Installing .gitignore_global..."
+  echo "⚙️  Configuring git..."
   ln -sf "$DIR/.gitignore_global" "$HOME/.gitignore_global"
   git config --global core.excludesfile "$HOME/.gitignore_global"
+  git config --global push.default current
 }
 
 # Use .gitignore_global from dotfiles
