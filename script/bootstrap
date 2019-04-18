@@ -53,6 +53,18 @@ configure_iterm2() {
   fi
 }
 
+configure_macOS() {
+  if [ "$(uname)" == "Darwin" ] ; then
+    echo "🍏 Configuring macOS..."
+    for PLIST in "$DIR"/config/macOS/*.plist
+    do
+      SETTING=$(basename "$PLIST" .plist)
+      defaults import "$SETTING" "$PLIST"
+    done
+    killall Dock
+  fi
+}
+
 partytime() {
   echo -e "\n🤙 Looks like we're good to go! Open a new shell!"
 }
@@ -64,5 +76,6 @@ install_bash_it
 install_powerline_fonts
 configure_atom
 configure_iterm2
+configure_macOS
 
 partytime
