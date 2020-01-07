@@ -4,4 +4,4 @@ sudo: required
 install:
   - sudo apt-get install shellcheck
 script:
-  - ./script/bootstrap --debug && ./script/test
+  - sudo ./script/bootstrap --debug && ./script/test
