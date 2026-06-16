@@ -1,4 +1,4 @@
-# dotfiles ![zsh](https://img.shields.io/badge/%F0%9F%9B%A0-zsh-blue.svg)
+# dotfiles ![zsh](https://img.shields.io/badge/%F0%9F%9B%A0-zsh-blue.svg) [![CI](https://github.com/rypit/dotfiles/actions/workflows/test.yml/badge.svg)](https://github.com/rypit/dotfiles/actions/workflows/test.yml)
 
 My personal dotfiles for [`zsh`](https://www.zsh.org/).
 
