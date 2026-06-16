@@ -76,7 +76,7 @@ configure_macOS() {
 }
 
 partytime() {
-  echo -e "\n🤙 Modernization complete! Open a new Zsh shell and enjoy 'ghostly' theme!"
+  echo -e "\n🤙 Looks like we're good to go! Open a new shell!"
 }
 
 # Do the things...
