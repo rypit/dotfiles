@@ -5,11 +5,12 @@
 # confirmations, etc.) must go above this block; everything else may go below.
 # shellcheck disable=SC2296
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  # shellcheck disable=SC2296
+  # shellcheck disable=SC2296,SC1090
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # Antidote
+# shellcheck disable=SC1091
 source "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
 
 # Initialize completions
@@ -19,6 +20,7 @@ autoload -Uz compinit && compinit
 antidote load
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# shellcheck disable=SC1090
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Environment initializers

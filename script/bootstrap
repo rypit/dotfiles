@@ -35,8 +35,8 @@ install_zsh_config() {
 # Configure shell to zsh
 configure_shell() {
   echo "🐚 Configuring shell to zsh..."
-  ZSH_PATH="$(which zsh)"
-  if [ "$SHELL" != "$ZSH_PATH" ]; then
+  ZSH_PATH="$(command -v zsh)"
+  if [ -n "$ZSH_PATH" ] && [ "$SHELL" != "$ZSH_PATH" ]; then
     chsh -s "$ZSH_PATH"
   fi
 }

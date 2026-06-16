@@ -1,6 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2046
-RESULT=$(shellcheck -e SC1090,SC1091 script/* .zshrc)
+RESULT=$(shellcheck script/* .zshrc)
 if [ "$RESULT" == "" ] ; then
   echo "✅ Shellcheck passed"
 else
