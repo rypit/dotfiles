@@ -1,19 +1,27 @@
-# dotfiles ![bash](https://img.shields.io/badge/%F0%9F%9B%A0-bash-blue.svg) [![Build Status](https://travis-ci.com/rypit/dotfiles.svg?branch=master)](https://travis-ci.com/rypit/dotfiles)
-My personal dotfiles for [`bash`](https://www.gnu.org/software/bash/).
+# dotfiles ![zsh](https://img.shields.io/badge/%F0%9F%9B%A0-zsh-blue.svg)
 
-* 🤼‍ Plays well with [`strap`](https://github.com/MikeMcQuaid/strap) for laptop setup – [`script/bootstrap`](/script/bootstrap) is idempotent.
-* 🧙‍ Leverages [`bash-it`](https://github.com/Bash-it/bash-it) for convenience.
-* 🎨 Enhances the [`powerline-multiline`](https://github.com/Bash-it/bash-it/tree/master/themes/powerline-multiline) theme to provide consistent contextual info for:
-  * `⬢ nodenv`
-  * `🐍 pyenv`
-  * `💎 rbenv`
-* 🤵 Tailored for macOS, but should work on anything that runs bash.
-* ⚙️ Includes my personal application configuration for:
-  * ⚛️ [`atom`](https://atom.io/) my text editor of choice.
-  * 🐚 [`iTerm2`](https://www.iterm2.com/) a macOS terminal emulator.
-* ✅ Uses [`shellcheck`](https://github.com/koalaman/shellcheck) for static analysis.
-* 👷🏼‍ Continuously tested via [`TravisCI`](https://travis-ci.com/rypit/dotfiles).
+My personal dotfiles for [`zsh`](https://www.zsh.org/).
 
+* 🧙‍ Leverages [`antidote`](https://getantidote.github.io/) for Zsh plugin management.
+* 🚀 Uses the feature-rich and fast [`powerlevel10k`](https://github.com/romkatv/powerlevel10k) theme.
+* 👻 Optimized for the [`ghostty`](https://ghostty.org/) terminal emulator.
+* 🐍 Uses [`uv`](https://github.com/astral-sh/uv) for lightning-fast Python management.
+* 💎 Manages environments for `nodenv` and `rbenv`.
+* 🤵 Tailored for macOS with surgical `defaults write` configuration in `script/macos`.
+* ⚙️ Includes my personal application configuration for [`iTerm2`](https://www.iterm2.com/).
+* ✅ Validated with [`shellcheck`](https://github.com/koalaman/shellcheck).
 
-## Screenshot
-![eye candy](https://user-images.githubusercontent.com/191847/53690930-d5c2e900-3d41-11e9-9e92-2ba435998c8c.gif)
+## Installation
+
+Run the bootstrap script:
+
+```bash
+./script/bootstrap
+```
+
+This will:
+1. Install Homebrew (if missing).
+2. Install dependencies via `brew bundle` (using `~/projects/homebrew-brewfile`).
+3. Set your shell to `zsh`.
+4. Symlink configuration files.
+5. Apply macOS system preferences surgically.

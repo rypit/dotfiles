@@ -6,25 +6,38 @@ if [ "$1" == "--debug" ]; then
 fi
 
 DIR="$(cd "$(dirname "$0")/../" && pwd)"
+BREWFILE="/Users/rypit/projects/homebrew-brewfile/Brewfile"
 
-# Use .bash_profile from dotfiles
-install_bash_profile() {
-  BASH_PROFILE="$HOME/.bash_profile"
-  echo "👨🏻‍💻 Installing .bash_profile..."
-  ln -sf "$DIR"/.bash_profile "$BASH_PROFILE"
+# Install Homebrew if missing
+install_homebrew() {
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "🍺 Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
 }
 
-# Set default shell to bash
+# Run brew bundle
+run_brew_bundle() {
+  echo "📦 Running brew bundle..."
+  brew bundle --file="$BREWFILE"
+}
+
+# Install .zshrc and .zsh_plugins.txt
+install_zsh_config() {
+  echo "👨🏻‍💻 Installing Zsh configuration..."
+  ln -sf "$DIR"/.zshrc "$HOME/.zshrc"
+  ln -sf "$DIR"/.zsh_plugins.txt "$HOME/.zsh_plugins.txt"
+  if [ -f "$DIR/p10k.zsh" ]; then
+    ln -sf "$DIR/p10k.zsh" "$HOME/.p10k.zsh"
+  fi
+}
+
+# Configure shell to zsh
 configure_shell() {
-  echo "🐚 Configuring shell..."
-  BASH_PATH="/usr/local/bin/bash"
-  if [ "$SHELL" != "$BASH_PATH" ] ; then
-    FILE="/etc/shells"
-    BASH_CONFIGURED=$(grep "$BASH_PATH" "$FILE" || true)
-    if [ -z "$BASH_CONFIGURED" ] ; then
-      echo "$BASH_PATH" | sudo tee -a $FILE > /dev/null
-    fi
-    chsh -s "$BASH_PATH"
+  echo "🐚 Configuring shell to zsh..."
+  ZSH_PATH="$(which zsh)"
+  if [ "$SHELL" != "$ZSH_PATH" ]; then
+    chsh -s "$ZSH_PATH"
   fi
 }
 
@@ -36,62 +49,31 @@ install_gitignore() {
   git config --global push.default current
 }
 
-# Use .gitignore_global from dotfiles
-install_bash_it() {
-  echo "🎨 Installing bash-it"
-  BASH_IT="$HOME/.bash-it"
-  if [ ! -d "$BASH_IT" ] ; then
-    git clone --quiet --depth=1 https://github.com/Bash-it/bash-it.git "$BASH_IT"
-  fi
-}
-
-install_powerline_fonts() {
-  echo "🔠 Installing powerline-fonts..."
-  POWERLINE_FONTS="$HOME/.powerline-fonts"
-  if [ ! -d "$POWERLINE_FONTS" ] ; then
-    git clone https://github.com/powerline/fonts.git --quiet --depth=1 "$POWERLINE_FONTS"
-  fi
-  bash "$POWERLINE_FONTS/install.sh" >> /dev/null
-}
-
-configure_atom() {
-  echo "⚛️  Configuring atom..."
-  mkdir -p "$HOME/.atom"
-  ln -sf "$DIR/config/atom/config.cson" "$HOME/.atom/."
-}
-
 configure_iterm2() {
-  if [ "$(uname)" == "Darwin" ] ; then
+  if [ "$(uname)" == "Darwin" ]; then
     echo "👾 Configuring iTerm2..."
     defaults import com.googlecode.iTerm2 "$DIR"/config/iterm2/com.googlecode.iterm2.plist
   fi
 }
 
 configure_macOS() {
-  if [ "$(uname)" == "Darwin" ] ; then
+  if [ "$(uname)" == "Darwin" ]; then
     echo "🍏 Configuring macOS..."
-    for PLIST in "$DIR"/config/macOS/*.plist
-    do
-      SETTING=$(basename "$PLIST" .plist)
-      defaults import "$SETTING" "$PLIST"
-    done
-    killall Dock
+    bash "$DIR/script/macos"
   fi
 }
 
 partytime() {
-  echo -e "\n🤙 Looks like we're good to go! Open a new shell!"
+  echo -e "\n🤙 Modernization complete! Open a new Zsh shell and enjoy 'ghostly' theme!"
 }
 
 # Do the things...
+install_homebrew
+run_brew_bundle
 configure_shell
-configure_atom
+install_zsh_config
+install_gitignore
 configure_iterm2
 configure_macOS
-
-install_bash_profile
-install_gitignore
-install_bash_it
-install_powerline_fonts
 
 partytime

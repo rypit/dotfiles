@@ -1,0 +1,6 @@
+# shellcheck shell=zsh
+zsh-users/zsh-completions
+romkatv/powerlevel10k
+# sindresorhus/pure kind:fpath  # Keeping Pure commented out in case you want to switch back
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-syntax-highlighting
