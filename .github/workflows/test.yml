@@ -1,20 +1,33 @@
 name: CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   test:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - name: Check out repository
+      uses: actions/checkout@v4
 
-      - name: Run bootstrap
-        run: ./script/bootstrap --debug
+    - name: Set up Homebrew cache
+      id: cache-homebrew
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/Library/Caches/Homebrew
+          /usr/local/Homebrew
+          /opt/homebrew
+        key: ${{ runner.os }}-brew-${{ hashFiles('**/Brewfile') }}
+        restore-keys: |
+          ${{ runner.os }}-brew-
 
-      - name: Run tests
-        run: ./script/test
+    - name: Run bootstrap script
+      run: |
+        ./script/bootstrap
+      env:
+        CI: 'true'
+
+    - name: Run test script
+      run: |
+        ./script/test

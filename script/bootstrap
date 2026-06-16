@@ -19,7 +19,22 @@ install_homebrew() {
 # Run brew bundle
 run_brew_bundle() {
   echo "📦 Running brew bundle..."
-  brew bundle --file="$BREWFILE"
+
+  local bundle_file="$BREWFILE"
+
+  if [ "$CI" = "true" ]; then
+    echo "⚠️ CI detected: Generating a temporary MAS-free Brewfile..."
+    bundle_file="$(mktemp)"
+    # Create a copy of the Brewfile without any lines starting with 'mas'
+    grep -v '^mas ' "$BREWFILE" > "$bundle_file"
+  fi
+
+  brew bundle --file="$bundle_file"
+
+  # Clean up temporary file
+  if [ "$CI" = "true" ]; then
+    rm "$bundle_file"
+  fi
 }
 
 # Install .zshrc and .zsh_plugins.txt
