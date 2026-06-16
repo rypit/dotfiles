@@ -6,7 +6,7 @@ if [ "$1" == "--debug" ]; then
 fi
 
 DIR="$(cd "$(dirname "$0")/../" && pwd)"
-BREWFILE="/Users/rypit/projects/homebrew-brewfile/Brewfile"
+BREWFILE="$DIR/Brewfile"
 
 # Install Homebrew if missing
 install_homebrew() {
@@ -34,6 +34,10 @@ install_zsh_config() {
 
 # Configure shell to zsh
 configure_shell() {
+  if [ "$CI" = "true" ]; then
+    echo "🐚 Skipping interactive shell configuration in CI..."
+    return
+  fi
   echo "🐚 Configuring shell to zsh..."
   ZSH_PATH="$(command -v zsh)"
   if [ -n "$ZSH_PATH" ] && [ "$SHELL" != "$ZSH_PATH" ]; then

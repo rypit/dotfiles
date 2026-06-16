@@ -1,7 +1,0 @@
-language: minimal
-if: branch = master OR type = pull_request
-sudo: required
-install:
-  - sudo apt-get install shellcheck
-script:
-  - sudo ./script/bootstrap --debug && ./script/test
