@@ -8,7 +8,6 @@ My personal dotfiles for [`zsh`](https://www.zsh.org/).
 * 🐍 Uses [`uv`](https://github.com/astral-sh/uv) for lightning-fast Python management.
 * 💎 Manages environments for `nodenv` and `rbenv`.
 * 🤵 Tailored for macOS with surgical `defaults write` configuration in `script/macos`.
-* ⚙️ Includes my personal application configuration for [`iTerm2`](https://www.iterm2.com/).
 * ✅ Validated with [`shellcheck`](https://github.com/koalaman/shellcheck).
 
 ## Installation

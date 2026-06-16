@@ -49,13 +49,6 @@ install_gitignore() {
   git config --global push.default current
 }
 
-configure_iterm2() {
-  if [ "$(uname)" == "Darwin" ]; then
-    echo "👾 Configuring iTerm2..."
-    defaults import com.googlecode.iTerm2 "$DIR"/config/iterm2/com.googlecode.iterm2.plist
-  fi
-}
-
 configure_macOS() {
   if [ "$(uname)" == "Darwin" ]; then
     echo "🍏 Configuring macOS..."
@@ -73,7 +66,6 @@ run_brew_bundle
 configure_shell
 install_zsh_config
 install_gitignore
-configure_iterm2
 configure_macOS
 
 partytime
