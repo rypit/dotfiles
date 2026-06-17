@@ -76,6 +76,10 @@ configure_macOS() {
 }
 
 setup_llm() {
+  if [ "$CI" = "true" ]; then
+    echo "🤖 Skipping Local LLM setup in CI..."
+    return
+  fi
   echo "🤖 Setting up Local LLM..."
   bash "$DIR/script/llm" setup
 }
