@@ -2,9 +2,9 @@ cask_args appdir: '/Applications'
 
 # Brews
 brew  'antidote'
+brew  'gcc'
 brew  'gemini-cli'
 brew  'gpg'
-brew  'gcc'
 brew  'llama.cpp'
 brew  'mas'
 brew  'nodenv'
@@ -15,7 +15,6 @@ brew  'shellcheck'
 brew  'uv'
 
 # Casks
-cask  'visual-studio-code'
 cask  'caffeine'
 cask  'claude-code'
 cask  'docker-desktop'
@@ -23,6 +22,7 @@ cask  'ghostty'
 cask  'google-chrome'
 cask  'obsidian'
 cask  'spotify'
+cask  'visual-studio-code'
 
 # App Store
 mas   '1Password 7',        id: 1333542190
