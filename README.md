@@ -54,6 +54,6 @@ This project is optimized for local agentic coding on Apple Silicon (M5 Max reco
 
 ### 🛠️ Tools
 - **`llama.cpp`**: Efficient inference engine for Apple Silicon.
-- **`aider`**: CLI coding agent that works with your local model.
+- **[`aider`](https://github.com/paul-gauthier/aider)**: CLI coding agent that works with your local model.
 - **`Qwen2.5-Coder-32B`**: High-performance local model for coding tasks.
 - **`script/llm`**: Management utility for your local LLM environment.
