@@ -103,4 +103,3 @@ setup_llm
 
 partytime
 
-source "$HOME/.zshrc"
