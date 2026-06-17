@@ -101,3 +101,6 @@ configure_macOS
 setup_llm
 
 partytime
+
+# Add this line at the end of the script
+source "$HOME/.zshrc"
