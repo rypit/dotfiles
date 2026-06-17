@@ -32,8 +32,8 @@ setup() {
   uv tool install huggingface_hub --force
   
   # Install aider for the coding workflow
-  # Using --prefer-binary to avoid building heavy dependencies like scipy from source
-  uv tool install aider-chat --force
+  # Using Python 3.12 as audioop was removed in 3.13+ causing aider/pydub to fail
+  uv tool install aider-chat --python 3.12 --force
 }
 
 download() {

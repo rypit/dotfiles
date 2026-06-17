@@ -40,7 +40,6 @@ alias ll="ls -l"
 
 # Local LLM (llama.cpp + Aider)
 alias llm-start='$HOME/projects/dotfiles/script/llm start'
-alias code-agent='aider --model openai/qwen2.5-coder-32b-instruct --openai-api-base http://localhost:8080/v1'
 
 # History configuration
 HISTFILE="$HOME/.zsh_history"

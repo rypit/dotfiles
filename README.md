@@ -49,7 +49,7 @@ This project is optimized for local agentic coding on Apple Silicon (M5 Max reco
     ```
 4.  **Launch Agent**: Start a coding session in any repository:
     ```bash
-    code-agent
+    aider
     ```
 
 ### 🛠️ Tools
