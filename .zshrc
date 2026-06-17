@@ -1,6 +1,10 @@
 # shellcheck shell=bash
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Path
+export PATH="$HOME/.local/bin:$PATH"
+
+# Enable Powerlevel10k instant prompt.
+ Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 # shellcheck disable=SC2296
@@ -33,6 +37,10 @@ eval "$(uv generate-shell-completion zsh)"
 # Aliases
 alias ls="ls -G"
 alias ll="ls -l"
+
+# Local LLM (llama.cpp + Aider)
+alias llm-start='$HOME/projects/dotfiles/script/llm start'
+alias code-agent='aider --model openai/qwen2.5-coder-32b-instruct --openai-api-base http://localhost:8080/v1'
 
 # History configuration
 HISTFILE="$HOME/.zsh_history"

@@ -75,6 +75,11 @@ configure_macOS() {
   fi
 }
 
+setup_llm() {
+  echo "🤖 Setting up Local LLM..."
+  bash "$DIR/script/llm" setup
+}
+
 partytime() {
   echo -e "\n🤙 Looks like we're good to go! Open a new shell!"
 }
@@ -86,5 +91,6 @@ configure_shell
 install_zsh_config
 install_gitignore
 configure_macOS
+setup_llm
 
 partytime

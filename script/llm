@@ -1,0 +1,83 @@
+#!/bin/bash
+set -e
+
+# Configuration
+MODEL_REPO="Qwen/Qwen2.5-Coder-32B-Instruct-GGUF"
+MODEL_FILE="qwen2.5-coder-32b-instruct-q8_0.gguf"
+CONTEXT_SIZE=32768
+PORT=8080
+
+# Paths
+MODEL_DIR="$HOME/.local/share/llm/models"
+export PATH="$HOME/.local/bin:$PATH"
+
+mkdir -p "$MODEL_DIR"
+
+setup() {
+  echo "🛠️ Setting up LLM environment..."
+  
+  # Help scipy find openblas on Apple Silicon
+  if [ "$(uname)" == "Darwin" ]; then
+    export PKG_CONFIG_PATH="/opt/homebrew/opt/openblas/lib/pkgconfig:$PKG_CONFIG_PATH"
+    export LDFLAGS="-L/opt/homebrew/opt/openblas/lib"
+    export CPPFLAGS="-I/opt/homebrew/opt/openblas/include"
+  fi
+
+  if ! command -v uv >/dev/null 2>&1; then
+    echo "❌ 'uv' is not installed. Please run script/bootstrap first."
+    exit 1
+  fi
+  
+  # Install huggingface_hub for fast downloads
+  uv tool install huggingface_hub --force
+  
+  # Install aider for the coding workflow
+  # Using --prefer-binary to avoid building heavy dependencies like scipy from source
+  uv tool install aider-chat --force
+}
+
+download() {
+  echo "📥 Downloading $MODEL_FILE from $MODEL_REPO..."
+  hf download "$MODEL_REPO" "$MODEL_FILE" --local-dir "$MODEL_DIR"
+}
+
+start() {
+  MODEL_PATH="$MODEL_DIR/$MODEL_FILE"
+  
+  if [ ! -f "$MODEL_PATH" ]; then
+    echo "❌ Model not found at $MODEL_PATH. Running download first..."
+    download
+  fi
+
+  echo "🚀 Starting llama-server on port $PORT..."
+  echo "   Model: $MODEL_FILE"
+  echo "   Context: $CONTEXT_SIZE"
+  echo "   GPU Offload: Full (-ngl 99)"
+  
+  llama-server \
+    -m "$MODEL_PATH" \
+    -c "$CONTEXT_SIZE" \
+    --port "$PORT" \
+    -ngl 99 \
+    --no-mmap
+}
+
+usage() {
+  echo "Usage: $0 {setup|download|start}"
+  exit 1
+}
+
+case "$1" in
+  setup)
+    setup
+    ;;
+  download)
+    download
+    ;;
+  start)
+    start
+    ;;
+  *)
+    usage
+    ;;
+esac

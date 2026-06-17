@@ -27,3 +27,33 @@ This will:
 3. Set your shell to `zsh`.
 4. Symlink configuration files.
 5. Apply macOS system preferences surgically.
+6. Initialize the local LLM environment.
+
+## Local LLM Workflow
+
+This project is optimized for local agentic coding on Apple Silicon (M5 Max recommended) using `llama.cpp` and `aider`.
+
+### 🚀 Getting Started
+
+1.  **Initialize**: The LLM environment is set up during `./script/bootstrap`. You can manually trigger it with:
+    ```bash
+    ./script/llm setup
+    ```
+2.  **Download Model**: Retrieve the optimized Qwen2.5-Coder-32B-Instruct-Q8_0 model (~34GB):
+    ```bash
+    ./script/llm download
+    ```
+3.  **Start Server**: Launch the `llama.cpp` server with full GPU acceleration:
+    ```bash
+    llm-start
+    ```
+4.  **Launch Agent**: Start a coding session in any repository:
+    ```bash
+    code-agent
+    ```
+
+### 🛠️ Tools
+- **`llama.cpp`**: Efficient inference engine for Apple Silicon.
+- **`aider`**: CLI coding agent that works with your local model.
+- **`Qwen2.5-Coder-32B`**: High-performance local model for coding tasks.
+- **`script/llm`**: Management utility for your local LLM environment.
