@@ -45,6 +45,9 @@ install_zsh_config() {
   if [ -f "$DIR/p10k.zsh" ]; then
     ln -sf "$DIR/p10k.zsh" "$HOME/.p10k.zsh"
   fi
+  if [ -f "$DIR/.aider.conf.yml" ]; then
+    ln -sf "$DIR/.aider.conf.yml" "$HOME/.aider.conf.yml"
+  fi
 }
 
 # Configure shell to zsh
