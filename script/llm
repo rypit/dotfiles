@@ -4,7 +4,7 @@ set -e
 # Configuration
 MODEL_REPO="Qwen/Qwen2.5-Coder-32B-Instruct-GGUF"
 MODEL_FILE="qwen2.5-coder-32b-instruct-q8_0.gguf"
-CONTEXT_SIZE=32768
+CONTEXT_SIZE=16384
 PORT=8080
 
 # Paths
@@ -59,7 +59,12 @@ start() {
     -c "$CONTEXT_SIZE" \
     --port "$PORT" \
     -ngl 99 \
-    --no-mmap
+    -fa on \
+    --context-shift \
+    -np 1 \
+    --kv-unified \
+    -t 14 \
+    -tb 14
 }
 
 usage() {
