@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+# This script sets up the development environment.
 if [ "$1" == "--debug" ]; then
   set -x
 fi
