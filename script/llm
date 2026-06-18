@@ -2,9 +2,10 @@
 set -e
 
 # Configuration
-MODEL_REPO="Qwen/Qwen2.5-Coder-32B-Instruct-GGUF"
-MODEL_FILE="qwen2.5-coder-32b-instruct-q8_0.gguf"
-CONTEXT_SIZE=16384
+MODEL_REPO="Qwen/Qwen3-Coder-Next-GGUF"
+MODEL_SUBDIR="Qwen3-Coder-Next-Q4_K_M"
+MODEL_FILE="$MODEL_SUBDIR/Qwen3-Coder-Next-Q4_K_M-00001-of-00004.gguf"
+CONTEXT_SIZE=32768
 PORT=8080
 
 # Paths
@@ -12,6 +13,22 @@ MODEL_DIR="$HOME/.local/share/llm/models"
 export PATH="$HOME/.local/bin:$PATH"
 
 mkdir -p "$MODEL_DIR"
+
+authenticate() {
+  if ! command -v hf >/dev/null 2>&1; then
+    echo "❌ 'hf' CLI is not installed. Please install it to authenticate."
+    exit 1
+  fi
+
+  if [ -z "${HF_TOKEN:-}" ]; then
+    echo "⚠️  HF_TOKEN is not set. Falling back to interactive Hugging Face login..."
+    hf auth login
+    return
+  fi
+
+  echo "🔐 Authenticating with Hugging Face..."
+  hf auth login --token "$HF_TOKEN"
+}
 
 setup() {
   echo "🛠️ Setting up LLM environment..."
@@ -30,31 +47,64 @@ setup() {
   
   # Install huggingface_hub for fast downloads
   uv tool install huggingface_hub --force
-  
   # Install aider for the coding workflow
   # Using Python 3.12 as audioop was removed in 3.13+ causing aider/pydub to fail
   uv tool install aider-chat --python 3.12 --force
 }
 
 download() {
-  echo "📥 Downloading $MODEL_FILE from $MODEL_REPO..."
-  hf download "$MODEL_REPO" "$MODEL_FILE" --local-dir "$MODEL_DIR"
+  authenticate
+  echo "📥 Downloading $MODEL_SUBDIR split GGUF files from $MODEL_REPO..."
+  hf download "$MODEL_REPO" --include "$MODEL_SUBDIR/*" --local-dir "$MODEL_DIR"
 }
 
 start() {
   MODEL_PATH="$MODEL_DIR/$MODEL_FILE"
-  
-  if [ ! -f "$MODEL_PATH" ]; then
-    echo "❌ Model not found at $MODEL_PATH. Running download first..."
+
+  # Verify all split shards exist (assumes 4 shards for this package)
+  missing_shards=()
+  for i in 1 2 3 4; do
+    shard="$MODEL_DIR/$MODEL_SUBDIR/Qwen3-Coder-Next-Q4_K_M-$(printf "%05d" "$i")-of-00004.gguf"
+    if [ ! -f "$shard" ]; then
+      missing_shards+=("$shard")
+    fi
+  done
+
+  if [ ${#missing_shards[@]} -gt 0 ]; then
+    echo "❌ Missing model shards:" >&2
+    for s in "${missing_shards[@]}"; do echo "  - $s" >&2; done
+    echo "Running download to fetch missing shards..." >&2
     download
   fi
+
+  # Determine a conservative thread count to keep the machine responsive.
+  CPU_CORES=$(sysctl -n hw.ncpu 2>/dev/null || nproc 2>/dev/null || echo 8)
+  if [ "$CPU_CORES" -ge 12 ]; then
+    RESERVED=4
+  elif [ "$CPU_CORES" -ge 8 ]; then
+    RESERVED=3
+  elif [ "$CPU_CORES" -ge 4 ]; then
+    RESERVED=2
+  else
+    RESERVED=1
+  fi
+  THREADS=$(( CPU_CORES - RESERVED ))
+  if [ "$THREADS" -lt 1 ]; then THREADS=1; fi
+
+  # Check memory size (bytes -> GB)
+  MEM_BYTES=$(sysctl -n hw.memsize 2>/dev/null || echo 0)
+  MEM_GB=$(( MEM_BYTES / 1024 / 1024 / 1024 ))
 
   echo "🚀 Starting llama-server on port $PORT..."
   echo "   Model: $MODEL_FILE"
   echo "   Context: $CONTEXT_SIZE"
-  echo "   GPU Offload: Full (-ngl 99)"
-  
-  llama-server \
+  echo "   CPU cores: $CPU_CORES (reserving $RESERVED for system and dev work) -> threads: $THREADS"
+  echo "   System RAM: ${MEM_GB}GB"
+
+  # Run with lower CPU priority so interactive work stays snappy.
+  NICE_CMD="nice -n 10"
+
+  ${NICE_CMD} llama-server \
     -m "$MODEL_PATH" \
     -c "$CONTEXT_SIZE" \
     --port "$PORT" \
@@ -63,8 +113,41 @@ start() {
     --context-shift \
     -np 1 \
     --kv-unified \
-    -t 14 \
-    -tb 14
+    -t "$THREADS" \
+    -tb "$THREADS" \
+    --jinja
+}
+
+benchmark() {
+  API_BASE="http://localhost:$PORT/v1"
+  API="$API_BASE/chat/completions"
+  MODEL_NAME="openai/qwen3-coder-next-80b"
+  ITERS=3
+  MAX_TOKENS=256
+
+  echo "🔬 Running benchmark against $API_BASE using model $MODEL_NAME"
+
+  # Ensure server is reachable
+  if ! curl -sSf "$API_BASE/models" >/dev/null 2>&1; then
+    echo "❌ Local server not reachable at $API_BASE. Start it first with ./script/llm start" >&2
+    return 1
+  fi
+
+  total=0
+  for i in $(seq 1 $ITERS); do
+    echo "- Iteration $i/$ITERS: requesting $MAX_TOKENS tokens..."
+    start=$(date +%s.%N)
+    curl -s -X POST "$API" -H "Content-Type: application/json" -d "{\"model\":\"$MODEL_NAME\",\"messages\":[{\"role\":\"user\",\"content\":\"Generate plain text of approximately $MAX_TOKENS tokens without code blocks or commentary.\"}],\"max_tokens\":$MAX_TOKENS}" >/dev/null 2>&1
+    end=$(date +%s.%N)
+    dt=$(echo "$end - $start" | bc -l)
+    if [ $(echo "$dt <= 0" | bc -l) -eq 1 ]; then dt=0.001; fi
+    tps=$(echo "scale=2; $MAX_TOKENS / $dt" | bc -l)
+    echo "  -> ${tps} tokens/sec (elapsed ${dt}s)"
+    total=$(echo "$total + $tps" | bc -l)
+  done
+
+  avg=$(echo "scale=2; $total / $ITERS" | bc -l)
+  echo "✅ Benchmark complete — average ${avg} tokens/sec over ${ITERS} runs"
 }
 
 usage() {
@@ -78,6 +161,9 @@ case "$1" in
     ;;
   download)
     download
+    ;;
+  benchmark)
+    benchmark
     ;;
   start)
     start
