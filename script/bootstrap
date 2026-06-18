@@ -43,7 +43,7 @@ install_zsh_config() {
   echo "👨🏻‍💻 Installing Zsh configuration..."
   ln -sf "$DIR/config/.zshrc" "$HOME/.zshrc"
   ln -sf "$DIR/config/.zsh_plugins.txt" "$HOME/.zsh_plugins.txt"
-  if [ -f "$DIR/config/p10k.zsh" ]; then
+  if [ -f "$DIR/config/.p10k.zsh" ]; then
     ln -sf "$DIR/config/p10k.zsh" "$HOME/.p10k.zsh"
   fi
   if [ -f "$DIR/config/.aider.conf.yml" ]; then
