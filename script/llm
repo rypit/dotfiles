@@ -140,7 +140,7 @@ benchmark() {
     curl -s -X POST "$API" -H "Content-Type: application/json" -d "{\"model\":\"$MODEL_NAME\",\"messages\":[{\"role\":\"user\",\"content\":\"Generate plain text of approximately $MAX_TOKENS tokens without code blocks or commentary.\"}],\"max_tokens\":$MAX_TOKENS}" >/dev/null 2>&1
     end=$(date +%s.%N)
     dt=$(echo "$end - $start" | bc -l)
-    if [ $(echo "$dt <= 0" | bc -l) -eq 1 ]; then dt=0.001; fi
+    if [ "$(echo "$dt <= 0" | bc -l)" -eq 1 ]; then dt=0.001; fi
     tps=$(echo "scale=2; $MAX_TOKENS / $dt" | bc -l)
     echo "  -> ${tps} tokens/sec (elapsed ${dt}s)"
     total=$(echo "$total + $tps" | bc -l)
