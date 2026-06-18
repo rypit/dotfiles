@@ -44,15 +44,17 @@ defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 
 echo "📂 Configuring Finder..."
 
-# Finder: set list view as default
-# Use list view in all Finder windows by default
-# Four-letter codes for the other views: `icnv`, `clmv`, `glyv`
-defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+# Clear all saved per-folder view settings
+defaults delete com.apple.finder FXViewSettings 2>/dev/null
 
-# Finder: show hidden files by default
+# Set list view as the global default
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+defaults write com.apple.finder FXDefaultFolderViewStyle -string "Nlsv"
+
+# Show hidden files by default
 defaults write com.apple.finder AppleShowAllFiles -bool true
 
-# Finder: show all filename extensions
+# Show all filename extensions
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
 # Disable the warning when changing a file extension
@@ -89,4 +91,4 @@ for app in "Dock" "Finder"; do
   killall "$app" > /dev/null 2>&1
 done
 
-echo "✅ macOS configuration applied surgically. Note that some changes may require a logout/restart to take effect."
+echo "✅ macOS configuration applied. Some changes might need a logout/restart to kick in."
