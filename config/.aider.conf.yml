@@ -1,0 +1,27 @@
+# Aider Configuration for Local LLM
+# See: https://aider.chat/docs/config.html
+
+# Use the openai/ prefix to trigger OpenAI-compatible API logic
+model: openai/qwen3-coder-next-80b
+
+# Local llama-server endpoint
+openai-api-base: http://localhost:8080/v1
+
+# Dummy key to satisfy Aider's requirement for the openai/ provider
+openai-api-key: sk-local-llm
+
+# Use the architect edit format for better results with Qwen 2.5 Coder
+edit-format: ask
+
+# Explicitly set the context window to match script/llm (32k)
+# This avoids warnings about unknown context window sizes
+# map-tokens: 1024
+# max-chat-history-tokens: 8192
+
+# Model specific settings
+show-model-warnings: false
+
+# UI & Styling
+dark-mode: true
+code-theme: monokai
+

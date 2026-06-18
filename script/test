@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if shellcheck script/* .zshrc; then
+if shellcheck script/* config/.zshrc; then
   echo "✅ Shellcheck passed"
   exit 0
 else
