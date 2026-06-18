@@ -115,6 +115,7 @@ start() {
     --kv-unified \
     -t "$THREADS" \
     -tb "$THREADS" \
+    --mlock \
     --jinja
 }
 
