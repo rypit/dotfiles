@@ -89,7 +89,7 @@ setup_llm() {
 }
 
 partytime() {
-  echo -e "\n🤙 Looks like we're good to go! Open a new shell!"
+  echo -e "\n🤙 All set! Fire up a new shell and let's roll!"
 }
 
 # Do the things...
@@ -102,4 +102,3 @@ configure_macOS
 setup_llm
 
 partytime
-
