@@ -41,13 +41,13 @@ run_brew_bundle() {
 # Install .zshrc and .zsh_plugins.txt
 install_zsh_config() {
   echo "👨🏻‍💻 Installing Zsh configuration..."
-  ln -sf "$DIR"/.zshrc "$HOME/.zshrc"
-  ln -sf "$DIR"/.zsh_plugins.txt "$HOME/.zsh_plugins.txt"
-  if [ -f "$DIR/p10k.zsh" ]; then
-    ln -sf "$DIR/p10k.zsh" "$HOME/.p10k.zsh"
+  ln -sf "$DIR/config/.zshrc" "$HOME/.zshrc"
+  ln -sf "$DIR/config/.zsh_plugins.txt" "$HOME/.zsh_plugins.txt"
+  if [ -f "$DIR/config/p10k.zsh" ]; then
+    ln -sf "$DIR/config/p10k.zsh" "$HOME/.p10k.zsh"
   fi
-  if [ -f "$DIR/.aider.conf.yml" ]; then
-    ln -sf "$DIR/.aider.conf.yml" "$HOME/.aider.conf.yml"
+  if [ -f "$DIR/config/.aider.conf.yml" ]; then
+    ln -sf "$DIR/config/.aider.conf.yml" "$HOME/.aider.conf.yml"
   fi
 }
 
@@ -67,7 +67,7 @@ configure_shell() {
 # Use .gitignore_global from dotfiles
 install_gitignore() {
   echo "⚙️ Configuring git..."
-  ln -sf "$DIR/.gitignore_global" "$HOME/.gitignore_global"
+  ln -sf "$DIR/config/.gitignore_global" "$HOME/.gitignore_global"
   git config --global core.excludesfile "$HOME/.gitignore_global"
   git config --global push.default current
 }
