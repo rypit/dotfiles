@@ -39,7 +39,7 @@ This project is optimized for local agentic coding on Apple Silicon (M5 Max reco
     ```bash
     ./script/llm setup
     ```
-2.  **Download Model**: Retrieve the optimized Qwen2.5-Coder-32B-Instruct-Q8_0 model (~34GB):
+2.  **Download Model**: Retrieve the optimized Qwen3-Coder-Next-Q4_K_M model (~48GB split across 4 GGUF shards) from the official GGUF repo:
     ```bash
     ./script/llm download
     ```
@@ -55,5 +55,5 @@ This project is optimized for local agentic coding on Apple Silicon (M5 Max reco
 ### 🛠️ Tools
 - **`llama.cpp`**: Efficient inference engine for Apple Silicon.
 - **[`aider`](https://github.com/paul-gauthier/aider)**: CLI coding agent that works with your local model.
-- **`Qwen2.5-Coder-32B`**: High-performance local model for coding tasks.
+- **`Qwen3-Coder-Next-80B`**: High-performance local Mixture of Experts model for coding tasks.
 - **`script/llm`**: Management utility for your local LLM environment.
