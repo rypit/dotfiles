@@ -5,7 +5,7 @@ brew  'antidote'
 brew  'gcc'
 brew  'gemini-cli'
 brew  'gpg'
-brew  'llama.cpp'
+brew  'llama.cpp', args: ['with-metal']
 brew  'mas'
 brew  'nodenv'
 brew  'openblas'
