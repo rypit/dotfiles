@@ -72,6 +72,13 @@ install_gitignore() {
   git config --global push.default current
 }
 
+# Install Ghostty config
+install_ghostty_config() {
+  echo "🖥️ Installing Ghostty configuration..."
+  mkdir -p "$HOME/.config/ghostty"
+  ln -sf "$DIR/config/.ghostty" "$HOME/.config/ghostty/config"
+}
+
 configure_macOS() {
   if [ "$(uname)" == "Darwin" ]; then
     echo "🍏 Configuring macOS..."
@@ -98,6 +105,7 @@ run_brew_bundle
 configure_shell
 install_zsh_config
 install_gitignore
+install_ghostty_config
 configure_macOS
 setup_llm
 

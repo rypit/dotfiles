@@ -1,0 +1,11 @@
+# Ghostty terminal config
+# See: https://github.com/ghostty-org/ghostty/blob/main/docs/config.md
+
+# Translucency (macOS/Linux)
+opacity = 0.8
+
+# Alternative: use background with alpha
+# background = #12121e85
+
+# Optional: other common settings
+window-opacity = 0.8
