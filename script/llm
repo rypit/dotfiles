@@ -2,9 +2,7 @@
 set -e
 
 # Configuration
-MODEL_REPO="Qwen/Qwen3-Coder-Next-GGUF"
-MODEL_SUBDIR="Qwen3-Coder-Next-Q4_K_M"
-MODEL_FILE="$MODEL_SUBDIR/Qwen3-Coder-Next-Q4_K_M-00001-of-00004.gguf"
+MODEL_REPO="mlx-community/Qwen3-Coder-Next-8bit"
 CONTEXT_SIZE=32768
 PORT=8080
 
@@ -33,13 +31,6 @@ authenticate() {
 setup() {
   echo "🛠️ Setting up LLM environment..."
   
-  # Help scipy find openblas on Apple Silicon
-  if [ "$(uname)" == "Darwin" ]; then
-    export PKG_CONFIG_PATH="/opt/homebrew/opt/openblas/lib/pkgconfig:$PKG_CONFIG_PATH"
-    export LDFLAGS="-L/opt/homebrew/opt/openblas/lib"
-    export CPPFLAGS="-I/opt/homebrew/opt/openblas/include"
-  fi
-
   if ! command -v uv >/dev/null 2>&1; then
     echo "❌ 'uv' is not installed. Please run script/bootstrap first."
     exit 1
@@ -47,76 +38,31 @@ setup() {
   
   # Install huggingface_hub for fast downloads
   uv tool install huggingface_hub --force
-  # Install aider for the coding workflow
-  # Using Python 3.12 as audioop was removed in 3.13+ causing aider/pydub to fail
-  uv tool install aider-chat --python 3.12 --force
+  # Install mlx-lm for running the model
+  uv tool install mlx-lm --force
 }
 
 download() {
   authenticate
-  echo "📥 Downloading $MODEL_SUBDIR split GGUF files from $MODEL_REPO..."
-  hf download "$MODEL_REPO" --include "$MODEL_SUBDIR/*" --local-dir "$MODEL_DIR"
+  echo "📥 Downloading $MODEL_REPO from Hugging Face..."
+  hf download "$MODEL_REPO" --local-dir "$MODEL_DIR"
 }
 
 start() {
-  MODEL_PATH="$MODEL_DIR/$MODEL_FILE"
-
-  # Verify all split shards exist (assumes 4 shards for this package)
-  missing_shards=()
-  for i in 1 2 3 4; do
-    shard="$MODEL_DIR/$MODEL_SUBDIR/Qwen3-Coder-Next-Q4_K_M-$(printf "%05d" "$i")-of-00004.gguf"
-    if [ ! -f "$shard" ]; then
-      missing_shards+=("$shard")
-    fi
-  done
-
-  if [ ${#missing_shards[@]} -gt 0 ]; then
-    echo "❌ Missing model shards:" >&2
-    for s in "${missing_shards[@]}"; do echo "  - $s" >&2; done
-    echo "Running download to fetch missing shards..." >&2
+  # Check if model directory exists and has files
+  if [ ! -d "$MODEL_DIR" ] || [ -z "$(ls -A "$MODEL_DIR" 2>/dev/null)" ]; then
+    echo "❌ Model not found at $MODEL_DIR. Running download first..."
     download
   fi
 
-  # Determine a conservative thread count to keep the machine responsive.
-  CPU_CORES=$(sysctl -n hw.ncpu 2>/dev/null || nproc 2>/dev/null || echo 8)
-  if [ "$CPU_CORES" -ge 12 ]; then
-    RESERVED=4
-  elif [ "$CPU_CORES" -ge 8 ]; then
-    RESERVED=3
-  elif [ "$CPU_CORES" -ge 4 ]; then
-    RESERVED=2
-  else
-    RESERVED=1
-  fi
-  THREADS=$(( CPU_CORES - RESERVED ))
-  if [ "$THREADS" -lt 1 ]; then THREADS=1; fi
-
-  # Check memory size (bytes -> GB)
-  MEM_BYTES=$(sysctl -n hw.memsize 2>/dev/null || echo 0)
-  MEM_GB=$(( MEM_BYTES / 1024 / 1024 / 1024 ))
-
-  echo "👋 Hey there! Starting llama-server on port $PORT..."
-  echo "   Model: $MODEL_FILE"
+  echo "👋 Hey there! Starting mlx-lm server on port $PORT..."
+  echo "   Model: $MODEL_REPO"
   echo "   Context: $CONTEXT_SIZE"
-  echo "   CPU cores: $CPU_CORES (reserving $RESERVED for system and dev work) -> threads: $THREADS"
-  echo "   System RAM: ${MEM_GB}GB"
 
-  # Run with lower CPU priority so interactive work stays snappy.
-  NICE_CMD="nice -n 10"
-
-  ${NICE_CMD} llama-server \
-    -m "$MODEL_PATH" \
-    -c "$CONTEXT_SIZE" \
+  mlx-lm serve \
+    --model "$MODEL_DIR" \
     --port "$PORT" \
-    -ngl 99 \
-    -fa on \
-    --context-shift \
-    -np 1 \
-    --kv-unified \
-    -t "$THREADS" \
-    -tb "$THREADS" \
-    --mlock \
-    --jinja
+    --context-size "$CONTEXT_SIZE"
 }
 
 benchmark() {
@@ -137,10 +83,10 @@ benchmark() {
   total=0
   for i in $(seq 1 $ITERS); do
     echo "- Iteration $i/$ITERS: requesting $MAX_TOKENS tokens..."
-    start=$(date +%s.%N)
+    start_time=$(date +%s.%N)
     curl -s -X POST "$API" -H "Content-Type: application/json" -d "{\"model\":\"$MODEL_NAME\",\"messages\":[{\"role\":\"user\",\"content\":\"Generate plain text of approximately $MAX_TOKENS tokens without code blocks or commentary.\"}],\"max_tokens\":$MAX_TOKENS}" >/dev/null 2>&1
-    end=$(date +%s.%N)
-    dt=$(echo "$end - $start" | bc -l)
+    end_time=$(date +%s.%N)
+    dt=$(echo "$end_time - $start_time" | bc -l)
     if [ "$(echo "$dt <= 0" | bc -l)" -eq 1 ]; then dt=0.001; fi
     tps=$(echo "scale=2; $MAX_TOKENS / $dt" | bc -l)
     echo "  -> ${tps} tokens/sec (elapsed ${dt}s)"
