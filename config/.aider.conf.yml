@@ -4,7 +4,7 @@
 # Use the openai/ prefix to trigger OpenAI-compatible API logic
 model: openai/default_model
 
-# Local llama-server endpoint
+# Local mlx-lm server endpoint
 openai-api-base: http://localhost:8080/v1
 
 # Dummy key to satisfy Aider's requirement for the openai/ provider
@@ -13,10 +13,12 @@ openai-api-key: sk-local-llm
 # Use the architect edit format for better results with Qwen 2.5 Coder
 edit-format: whole
 
-# Explicitly set the context window to match script/llm (32k)
-# This avoids warnings about unknown context window sizes
-# map-tokens: 1024
-# max-chat-history-tokens: 8192
+# Explicitly set context window to match mlx-lm (32k total)
+# Split into input/output to avoid truncation
+map-tokens: 8192
+max-chat-history-tokens: 8192
+max-input-tokens: 16384
+max-output-tokens: 16384
 
 # Model specific settings
 show-model-warnings: false
@@ -24,4 +26,3 @@ show-model-warnings: false
 # UI & Styling
 dark-mode: true
 code-theme: monokai
-
