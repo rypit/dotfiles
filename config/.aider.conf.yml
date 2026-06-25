@@ -2,7 +2,7 @@
 # See: https://aider.chat/docs/config.html
 
 # Use the openai/ prefix to trigger OpenAI-compatible API logic
-model: openai/qwen3-coder-next-80b
+model: openai/default_model
 
 # Local llama-server endpoint
 openai-api-base: http://localhost:8080/v1
@@ -11,7 +11,7 @@ openai-api-base: http://localhost:8080/v1
 openai-api-key: sk-local-llm
 
 # Use the architect edit format for better results with Qwen 2.5 Coder
-edit-format: ask
+edit-format: whole
 
 # Explicitly set the context window to match script/llm (32k)
 # This avoids warnings about unknown context window sizes

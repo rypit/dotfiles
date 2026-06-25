@@ -6,15 +6,16 @@ MODEL_REPO="mlx-community/Qwen3-Coder-Next-8bit"
 CONTEXT_SIZE=32768
 PORT=8080
 
-# Paths
-MODEL_DIR="$HOME/.local/share/llm/models"
+# Paths - Scopes dynamically to the specific model repository
+MODEL_DIR="$HOME/.local/share/llm/models/$MODEL_REPO"
 export PATH="$HOME/.local/bin:$PATH"
 
-mkdir -p "$MODEL_DIR"
+# Ensure the parent directory exists
+mkdir -p "$(dirname "$MODEL_DIR")"
 
 authenticate() {
   if ! command -v hf >/dev/null 2>&1; then
-    echo "❌ 'hf' CLI is not installed. Please install it to authenticate."
+    echo "❌ 'hf' CLI is not installed. Please run setup first."
     exit 1
   fi
 
@@ -36,9 +37,8 @@ setup() {
     exit 1
   fi
   
-  # Install huggingface_hub for fast downloads
+  # Installing huggingface_hub automatically provides the global 'hf' binary
   uv tool install huggingface_hub --force
-  # Install mlx-lm for running the model
   uv tool install mlx-lm --force
 }
 
@@ -49,26 +49,31 @@ download() {
 }
 
 start() {
-  # Check if model directory exists and has files
-  if [ ! -d "$MODEL_DIR" ] || [ -z "$(ls -A "$MODEL_DIR" 2>/dev/null)" ]; then
-    echo "❌ Model not found at $MODEL_DIR. Running download first..."
+  # Verifies the actual model configuration file exists before boot
+  if [ ! -f "$MODEL_DIR/config.json" ]; then
+    echo "❌ Model configuration not found at $MODEL_DIR. Running download first..."
     download
   fi
 
-  echo "👋 Hey there! Starting mlx-lm server on port $PORT..."
+  echo "👋 Hey there! Starting mlx_lm server on port $PORT..."
   echo "   Model: $MODEL_REPO"
-  echo "   Context: $CONTEXT_SIZE"
+  echo "   Context Max Tokens: $CONTEXT_SIZE"
 
-  mlx-lm serve \
+  # 🚀 Lift macOS unified memory allocation bounds for this process
+  export MLX_MAX_ALLOWABLE_MALLOC_MB=110000
+
+  mlx_lm server \
     --model "$MODEL_DIR" \
     --port "$PORT" \
-    --context-size "$CONTEXT_SIZE"
+    --max-tokens "$CONTEXT_SIZE"
 }
 
 benchmark() {
   API_BASE="http://localhost:$PORT/v1"
   API="$API_BASE/chat/completions"
-  MODEL_NAME="openai/qwen3-coder-next-80b"
+  
+  # FIXED: Target the internal memory cache key of mlx_lm
+  MODEL_NAME="default_model"
   ITERS=3
   MAX_TOKENS=256
 
@@ -84,7 +89,12 @@ benchmark() {
   for i in $(seq 1 $ITERS); do
     echo "- Iteration $i/$ITERS: requesting $MAX_TOKENS tokens..."
     start_time=$(date +%s.%N)
-    curl -s -X POST "$API" -H "Content-Type: application/json" -d "{\"model\":\"$MODEL_NAME\",\"messages\":[{\"role\":\"user\",\"content\":\"Generate plain text of approximately $MAX_TOKENS tokens without code blocks or commentary.\"}],\"max_tokens\":$MAX_TOKENS}" >/dev/null 2>&1
+    
+    # Payload targeting the "default_model" mapping string
+    curl -s -X POST "$API" \
+      -H "Content-Type: application/json" \
+      -d "{\"model\":\"$MODEL_NAME\",\"messages\":[{\"role\":\"user\",\"content\":\"Generate plain text of approximately $MAX_TOKENS tokens without code blocks or commentary.\"}],\"max_tokens\":$MAX_TOKENS}" >/dev/null 2>&1
+    
     end_time=$(date +%s.%N)
     dt=$(echo "$end_time - $start_time" | bc -l)
     if [ "$(echo "$dt <= 0" | bc -l)" -eq 1 ]; then dt=0.001; fi
@@ -98,7 +108,7 @@ benchmark() {
 }
 
 usage() {
-  echo "Usage: $0 {setup|download|start}"
+  echo "Usage: $0 {setup|download|start|benchmark}"
   exit 1
 }
 
