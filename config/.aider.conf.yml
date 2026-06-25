@@ -17,8 +17,8 @@ edit-format: whole
 # Split into input/output to avoid truncation
 map-tokens: 8192
 max-chat-history-tokens: 8192
-max-input-tokens: 16384
-max-output-tokens: 16384
+# max-input-tokens: 16384
+# max-output-tokens: 16384
 
 # Model specific settings
 show-model-warnings: false
