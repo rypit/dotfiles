@@ -96,24 +96,19 @@ setup_llm() {
   bash "$DIR/script/llm" setup
 }
 
-setup_cline() {
+setup_node_packages() {
   if [ "$CI" = "true" ]; then
-    echo "🤖 Skipping cline setup in CI..."
+    echo "🤖 Skipping Node.js package setup in CI..."
     return
   fi
 
-  echo "📦 Setting up cline..."
-
-  local dotfiles_dir="$DIR"
-  local package_json="$dotfiles_dir/package.json"
-
-  if [ ! -f "$package_json" ]; then
-    echo "Initializing package.json..."
-    cd "$dotfiles_dir" && npm init -y
+  echo "📦 Installing Node.js packages from package.json..."
+  cd "$DIR"
+  if [ -f "package.json" ]; then
+    npm install
+  else
+    echo "⚠️  No package.json found. Skipping Node.js package installation."
   fi
-
-  echo "Installing @openai/cline..."
-  cd "$dotfiles_dir" && npm install --save-dev @openai/cline
 }
 
 partytime() {
@@ -129,6 +124,6 @@ install_gitignore
 install_ghostty_config
 configure_macOS
 setup_llm
-setup_cline
+setup_node_packages
 
 partytime
