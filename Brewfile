@@ -3,7 +3,6 @@ cask_args appdir: '/Applications'
 # Brews
 brew  'antidote'
 brew  'gcc'
-brew  'gemini-cli'
 brew  'gpg'
 brew  'mas'
 brew  'nodenv'
@@ -12,6 +11,7 @@ brew  'shellcheck'
 brew  'uv'
 
 # Casks
+cask  'antigravity'
 cask  'caffeine'
 cask  'claude-code'
 cask  'docker-desktop'
