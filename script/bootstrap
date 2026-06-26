@@ -96,6 +96,26 @@ setup_llm() {
   bash "$DIR/script/llm" setup
 }
 
+setup_cline() {
+  if [ "$CI" = "true" ]; then
+    echo "🤖 Skipping cline setup in CI..."
+    return
+  fi
+
+  echo "📦 Setting up cline..."
+
+  local dotfiles_dir="$DIR"
+  local package_json="$dotfiles_dir/package.json"
+
+  if [ ! -f "$package_json" ]; then
+    echo "Initializing package.json..."
+    cd "$dotfiles_dir" && npm init -y
+  fi
+
+  echo "Installing @openai/cline..."
+  cd "$dotfiles_dir" && npm install --save-dev @openai/cline
+}
+
 partytime() {
   echo -e "\n🤙 All set! Fire up a new shell and let's roll!"
 }
@@ -109,5 +129,6 @@ install_gitignore
 install_ghostty_config
 configure_macOS
 setup_llm
+setup_cline
 
 partytime

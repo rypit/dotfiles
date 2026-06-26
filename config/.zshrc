@@ -38,6 +38,9 @@ eval "$(uv generate-shell-completion zsh)"
 alias ls="ls -G"
 alias ll="ls -l"
 
+# Cline
+alias cline='$HOME/projects/dotfiles/node_modules/.bin/cline'
+
 # Local LLM (llama.cpp + Aider)
 alias llm-start='$HOME/projects/dotfiles/script/llm start'
 
