@@ -23,7 +23,7 @@ Run the bootstrap script:
 
 This will:
 1. Install Homebrew (if missing).
-2. Install dependencies via `brew bundle` (using local `Brewfile`).
+2. Install dependencies via `brew_bundle` (using local `Brewfile`).
 3. Set your shell to `zsh`.
 4. Symlink configuration files.
 5. Apply macOS system preferences surgically.
@@ -39,7 +39,7 @@ This project is optimized for local agentic coding on Apple Silicon (M5 Max reco
     ```bash
     ./script/llm setup
     ```
-2.  **Download Model**: Retrieve the optimized Qwen3-Coder-Next-Q4_K_M model (~48GB split across 4 GGUF shards) from the official GGUF repo:
+2.  **Download Model**: Retrieve the optimized mlx-community/Qwen3-Coder-Next-8bit model (~4.8GB) from Hugging Face:
     ```bash
     ./script/llm download
     ```
@@ -55,5 +55,5 @@ This project is optimized for local agentic coding on Apple Silicon (M5 Max reco
 ### 🛠️ Tools
 - **`llama.cpp`**: Efficient inference engine for Apple Silicon.
 - **[`aider`](https://github.com/paul-gauthier/aider)**: CLI coding agent that works with your local model.
-- **`Qwen3-Coder-Next-80B`**: High-performance local Mixture of Experts model for coding tasks.
+- **`mlx-community/Qwen3-Coder-Next-8bit`**: Apple Silicon–optimized 8-bit model for efficient local inference.
 - **`script/llm`**: Management utility for your local LLM environment.
