@@ -12,7 +12,6 @@ My personal dotfiles for [`zsh`](https://www.zsh.org/).
 * 💎 Manages environments for `nodenv` and `rbenv`.
 * 🤵 Tailored for macOS with surgical `defaults write` configuration in `script/macos`.
 * ✅ Validated with [`shellcheck`](https://github.com/koalaman/shellcheck).
-* 🤖 Cline CLI settings managed via dotfiles with `script/settings` utility.
 
 ## Installation
 
@@ -30,33 +29,6 @@ This will:
 5. Apply macOS system preferences surgically.
 6. Initialize the local LLM environment.
 7. Restore Cline settings from dotfiles.
-
-## Cline Settings
-
-Cline CLI settings are stored in `config/.cline/data/settings/` and automatically restored during bootstrap.
-
-### Managing Settings
-
-Use the `script/settings` utility to manage your Cline configuration:
-
-```bash
-# Backup current settings to dotfiles
-./script/settings backup
-
-# Restore settings from dotfiles
-./script/settings restore
-
-# Sync settings (backup + restore)
-./script/settings sync
-```
-
-### Settings Structure
-
-The settings directory contains:
-- `providers.json` - API provider configurations (OpenAI-compatible for local LLM)
-- `cli-notices.json` - CLI notice preferences
-
-**Note:** The `.cline/` directory is gitignored to protect sensitive data like API keys.
 
 ## Local LLM Workflow
 
