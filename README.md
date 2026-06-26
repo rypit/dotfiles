@@ -12,6 +12,7 @@ My personal dotfiles for [`zsh`](https://www.zsh.org/).
 * 💎 Manages environments for `nodenv` and `rbenv`.
 * 🤵 Tailored for macOS with surgical `defaults write` configuration in `script/macos`.
 * ✅ Validated with [`shellcheck`](https://github.com/koalaman/shellcheck).
+* 🤖 Cline CLI settings managed via dotfiles with `script/settings` utility.
 
 ## Installation
 
@@ -28,10 +29,38 @@ This will:
 4. Symlink configuration files.
 5. Apply macOS system preferences surgically.
 6. Initialize the local LLM environment.
+7. Restore Cline settings from dotfiles.
+
+## Cline Settings
+
+Cline CLI settings are stored in `config/.cline/data/settings/` and automatically restored during bootstrap.
+
+### Managing Settings
+
+Use the `script/settings` utility to manage your Cline configuration:
+
+```bash
+# Backup current settings to dotfiles
+./script/settings backup
+
+# Restore settings from dotfiles
+./script/settings restore
+
+# Sync settings (backup + restore)
+./script/settings sync
+```
+
+### Settings Structure
+
+The settings directory contains:
+- `providers.json` - API provider configurations (OpenAI-compatible for local LLM)
+- `cli-notices.json` - CLI notice preferences
+
+**Note:** The `.cline/` directory is gitignored to protect sensitive data like API keys.
 
 ## Local LLM Workflow
 
-This project is optimized for local agentic coding on Apple Silicon (M5 Max recommended) using `llama.cpp` and `aider`.
+This project is optimized for local agentic coding on Apple Silicon (M5 Max recommended) using `llama.cpp` and `cline`.
 
 ### 🚀 Getting Started
 
@@ -49,11 +78,11 @@ This project is optimized for local agentic coding on Apple Silicon (M5 Max reco
     ```
 4.  **Launch Agent**: Start a coding session in any repository:
     ```bash
-    aider
+    cline
     ```
 
 ### 🛠️ Tools
 - **`llama.cpp`**: Efficient inference engine for Apple Silicon.
-- **[`aider`](https://github.com/paul-gauthier/aider)**: CLI coding agent that works with your local model.
+- **[`cline`](https://github.com/cline/cline)**: CLI coding agent that works with your local model.
 - **`mlx-community/Qwen3-Coder-Next-8bit`**: Apple Silicon–optimized 8-bit model for efficient local inference.
 - **`script/llm`**: Management utility for your local LLM environment.

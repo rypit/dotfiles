@@ -46,9 +46,6 @@ install_zsh_config() {
   if [ -f "$DIR/config/.p10k.zsh" ]; then
     ln -sf "$DIR/config/.p10k.zsh" "$HOME/.p10k.zsh"
   fi
-  if [ -f "$DIR/config/.aider.conf.yml" ]; then
-    ln -sf "$DIR/config/.aider.conf.yml" "$HOME/.aider.conf.yml"
-  fi
 }
 
 # Configure shell to zsh
@@ -96,6 +93,32 @@ setup_llm() {
   bash "$DIR/script/llm" setup
 }
 
+install_cline_settings() {
+  if [ "$CI" = "true" ]; then
+    echo "🤖 Skipping Cline settings setup in CI..."
+    return
+  fi
+
+  echo "🤖 Installing Cline settings..."
+
+  local dotfiles_settings="$DIR/config/.cline/data/settings"
+  local user_settings="$HOME/.cline/data/settings"
+
+  if [ -d "$dotfiles_settings" ]; then
+    mkdir -p "$user_settings"
+    for file in "$dotfiles_settings"/*.json; do
+      if [ -f "$file" ]; then
+        local filename
+        filename=$(basename "$file")
+        ln -sf "$file" "$user_settings/$filename"
+      fi
+    done
+    echo "✅ Cline settings installed from dotfiles!"
+  else
+    echo "⚠️  No Cline settings found in dotfiles at $dotfiles_settings"
+  fi
+}
+
 setup_node_packages() {
   if [ "$CI" = "true" ]; then
     echo "🤖 Skipping Node.js package setup in CI..."
@@ -125,5 +148,6 @@ install_ghostty_config
 configure_macOS
 setup_llm
 setup_node_packages
+install_cline_settings
 
 partytime

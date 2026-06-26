@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/rypit/dotfiles#readme",
   "devDependencies": {
-    "@cline/cline": "^1.0.0"
+    "cline": "^3.0.30"
   },
   "private": true
 }

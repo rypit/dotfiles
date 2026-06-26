@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "lastUsedProvider": "openai-compatible",
+  "providers": {
+    "openai-compatible": {
+      "settings": {
+        "provider": "openai-compatible",
+        "apiKey": "local-dev-key",
+        "model": "mlx-community/Qwen3-Coder-Next-8bit",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": {
+          "enabled": false
+        }
+      },
+      "updatedAt": "2026-06-26T04:39:34.646Z",
+      "tokenSource": "manual"
+    }
+  }
+}

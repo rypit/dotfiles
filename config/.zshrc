@@ -45,9 +45,11 @@ alias cline='$HOME/projects/dotfiles/node_modules/.bin/cline'
 alias llm-start='$HOME/projects/dotfiles/script/llm start'
 
 # Cline (local LLM agent)
-export CLINE_MODEL="mlx-community/Qwen3-Coder-Next-8bit"
-export CLINE_BASEURL="http://localhost:8080/v1"
-export CLINE_APIKEY="not-needed"
+# export CLINE_PROVIDER="openai"
+# export CLINE_BASE_URL="http://localhost:8080/v1"
+# export CLINE_API_KEY="local-dev-key"
+# export CLINE_MODEL="mlx-community/Qwen3-Coder-Next-8bit"
+# export CLINE_CONTEXT_WINDOW=32768
 
 # History configuration
 HISTFILE="$HOME/.zsh_history"

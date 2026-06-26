@@ -6,10 +6,6 @@ MODEL_REPO="mlx-community/Qwen3-Coder-Next-8bit"
 CONTEXT_SIZE=32768
 PORT=8080
 
-# Paths - Scopes dynamically to the specific model repository
-MODEL_DIR="$HOME/.local/share/llm/models/$MODEL_REPO"
-export PATH="$HOME/.local/bin:$PATH"
-
 # Ensure the parent directory exists
 mkdir -p "$(dirname "$MODEL_DIR")"
 
@@ -45,16 +41,10 @@ setup() {
 download() {
   authenticate
   echo "📥 Downloading $MODEL_REPO from Hugging Face..."
-  hf download "$MODEL_REPO" --local-dir "$MODEL_DIR"
+  hf download "$MODEL_REPO"
 }
 
 start() {
-  # Verifies the actual model configuration file exists before boot
-  if [ ! -f "$MODEL_DIR/config.json" ]; then
-    echo "❌ Model configuration not found at $MODEL_DIR. Running download first..."
-    download
-  fi
-
   echo "👋 Hey there! Starting mlx_lm server on port $PORT..."
   echo "   Model: $MODEL_REPO"
   echo "   Context Max Tokens: $CONTEXT_SIZE"
@@ -63,7 +53,7 @@ start() {
   export MLX_MAX_ALLOWABLE_MALLOC_MB=110000
 
   mlx_lm server \
-    --model "$MODEL_DIR" \
+    --model "$MODEL_REPO" \
     --port "$PORT" \
     --max-tokens "$CONTEXT_SIZE"
 }
