@@ -60,7 +60,7 @@ The settings directory contains:
 
 ## Local LLM Workflow
 
-This project is optimized for local agentic coding on Apple Silicon (M5 Max recommended) using `llama.cpp` and `cline`.
+This project is optimized for local agentic coding on Apple Silicon (M5 Max recommended) using `mlx-lm` and `cline`.
 
 ### 🚀 Getting Started
 
@@ -72,7 +72,7 @@ This project is optimized for local agentic coding on Apple Silicon (M5 Max reco
     ```bash
     ./script/llm download
     ```
-3.  **Start Server**: Launch the `llama.cpp` server with full GPU acceleration:
+3.  **Start Server**: Launch the mlx_lm server with full GPU acceleration:
     ```bash
     llm-start
     ```
@@ -82,7 +82,7 @@ This project is optimized for local agentic coding on Apple Silicon (M5 Max reco
     ```
 
 ### 🛠️ Tools
-- **`llama.cpp`**: Efficient inference engine for Apple Silicon.
+- **`mlx-lm`**: Efficient inference engine for Apple Silicon.
 - **[`cline`](https://github.com/cline/cline)**: CLI coding agent that works with your local model.
 - **`mlx-community/Qwen3-Coder-Next-8bit`**: Apple Silicon–optimized 8-bit model for efficient local inference.
 - **`script/llm`**: Management utility for your local LLM environment.

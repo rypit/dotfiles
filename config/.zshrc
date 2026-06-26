@@ -41,7 +41,7 @@ alias ll="ls -l"
 # Cline
 alias cline='$HOME/projects/dotfiles/node_modules/.bin/cline'
 
-# Local LLM (llama.cpp + Aider)
+# Local LLM (mlx-lm + Cline)
 alias llm-start='$HOME/projects/dotfiles/script/llm start'
 
 # Cline (local LLM agent)
