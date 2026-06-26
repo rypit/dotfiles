@@ -72,8 +72,8 @@ benchmark() {
   API_BASE="http://localhost:$PORT/v1"
   API="$API_BASE/chat/completions"
   
-  # FIXED: Target the internal memory cache key of mlx_lm
-  MODEL_NAME="default_model"
+  # Use the actual model repository name instead of hardcoded "default_model"
+  MODEL_NAME="$MODEL_REPO"
   ITERS=3
   MAX_TOKENS=256
 
@@ -90,7 +90,7 @@ benchmark() {
     echo "- Iteration $i/$ITERS: requesting $MAX_TOKENS tokens..."
     start_time=$(date +%s.%N)
     
-    # Payload targeting the "default_model" mapping string
+    # Payload targeting the actual model repository name
     curl -s -X POST "$API" \
       -H "Content-Type: application/json" \
       -d "{\"model\":\"$MODEL_NAME\",\"messages\":[{\"role\":\"user\",\"content\":\"Generate plain text of approximately $MAX_TOKENS tokens without code blocks or commentary.\"}],\"max_tokens\":$MAX_TOKENS}" >/dev/null 2>&1
