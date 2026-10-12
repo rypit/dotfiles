@@ -3,6 +3,7 @@ cask_args appdir: '/Applications'
 # Brews
 brew  'antidote'
 brew  'gcc'
+brew  'gh'
 brew  'gpg'
 brew  'mas'
 brew  'nodenv'
