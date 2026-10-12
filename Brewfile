@@ -1,5 +1,8 @@
 cask_args appdir: '/Applications'
 
+# Taps
+tap   'rypit/omlx-cask', 'https://github.com/rypit/omlx-cask'
+
 # Brews
 brew  'antidote'
 brew  'gcc'
@@ -19,6 +22,7 @@ cask  'docker-desktop'
 cask  'ghostty'
 cask  'google-chrome'
 cask  'obsidian'
+cask  'omlx-cask'
 cask  'spotify'
 cask  'visual-studio-code'
 
